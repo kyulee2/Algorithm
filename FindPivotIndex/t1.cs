@@ -25,6 +25,21 @@ Each element nums[i] will be an integer in the range [-1000, 1000].
 */
 // Comment: Easy and striaghtfoward
 public class Solution {
+// O(1) space and O(n) time
+    public int PivotIndex(int[] nums) {
+        int len = nums.Length;
+        int sum = 0;
+        foreach(var n in nums)
+            sum += n;
+        int l = 0;
+        for(int i=0; i<len; i++) {
+            int r = sum - l - nums[i];
+            if (l==r) return i;
+            l += nums[i];
+        }
+        return -1;
+    }
+// O(n) space and O(n) time
     public int PivotIndex(int[] nums) {
         int len = nums.Length;
         if (len==0) return -1;
