@@ -19,6 +19,9 @@ For Java users, please note that the input type has been changed to List<List<In
 // Comment: Use a SortedList instead of heap like merge sort.
 // To handle duplication, use hashcode for breaking order in Comparer.
 // O(kn) worst case. 
+// Note
+// This can use a heap like merge sort. But keep track of max.
+// Only new element or the old max can be candidate of max.
 public class Solution {
    public class TupleComparer : IComparer  
    {
