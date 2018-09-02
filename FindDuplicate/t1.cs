@@ -13,6 +13,7 @@ Your runtime complexity should be less than O(n2).
 There is only one duplicate number in the array, but it could be repeated more than once.
 */
 // Comment: Use sign to detect duplication.
+// The first one modifies array. See the second solution using a bit count O(32n)
 public class Solution {
     public int FindDuplicate(int[] nums) {
         for(int i=0; i<nums.Length; i++) {
@@ -24,5 +25,27 @@ public class Solution {
         }
         
         return -1;
+    }
+}
+// Comment: Use each bit count to detect more count which is duplicated
+public class Solution {
+    public int FindDuplicate(int[] nums) {
+        int len = nums.Length; // n+1
+        int ans = 0;
+        for(int i=0; i<32; i++) {
+            int bit = 1 << i;
+            int a = 0, b = 0;
+            for(int j=0; j<len; j++) {
+                if (j>0) { // 1 ~ n
+                    if ((j&bit) > 0)
+                        a++;
+                }
+                if ((nums[j] & bit) > 0)
+                    b++;
+            }
+            if (b>a)
+                ans += bit;
+        }
+        return ans;
     }
 }

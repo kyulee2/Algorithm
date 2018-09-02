@@ -66,6 +66,7 @@ Output:
 */
 // Comment: A bit interesting. Ordered by left/right increment (for column).
 // There is spoiler (see below), we also need to order them by recursion depth (for Row).
+// The bottom one has another solution using BFS -- the recursion order is enforced by itself
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -111,4 +112,48 @@ public class Solution {
         return ans;
     }
 }
+
+// Another one
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public IList<IList<int>> VerticalOrder(TreeNode root) {
+        // BFS enforces the depth order.. Just consider left/right column order
+        var map = new Dictionary<int, List<int>>();
+        var q = new Queue<Tuple<TreeNode, int>>();
+        var ans = new List<IList<int>>();
+        if (root==null) return ans;
+        
+        // Build map by BFS
+        var rt = new Tuple<TreeNode, int>(root, 0);
+        q.Enqueue(rt);
+        while(q.Count != 0) {
+            var nt = q.Dequeue();
+            var n = nt.Item1;
+            var c = nt.Item2;
+            if (!map.ContainsKey(c))
+                map[c] = new List<int>();
+            map[c].Add(n.val);
+            if (n.left != null)
+                q.Enqueue(new Tuple<TreeNode, int>(n.left, c-1));
+            if (n.right != null)
+                q.Enqueue(new Tuple<TreeNode, int>(n.right, c+1));
+        }
+        
+        // Postprocess map
+        var l = map.Keys.ToList();
+        l.Sort();
+        foreach(var k in l)
+            ans.Add(map[k]);
+        return ans;
+    }
+}
+
 
