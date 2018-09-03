@@ -53,3 +53,36 @@ public class Solution {
         return ans.ToArray();
     }
 }
+// Comment: Another one try similar to one -- factoring out Insert
+public class Solution {
+    public int[] MaxSlidingWindow(int[] nums, int k) {
+        var ans = new List<int>();
+        if (k==0) return ans.ToArray(); // spoiler
+        
+        var w = new LinkedList<int>(); // index
+        // Insert t to window, w which is a sorted one -- left/prior smaller ones are elided.
+        void Insert(int idx) {
+            if (w.Count !=0){
+                while(w.Count>0 && nums[w.Last.Value] <= nums[idx]) {
+                    w.RemoveLast();
+                }
+            }
+            w.AddLast(idx);
+        }
+        // Init the first k elements
+        for(int i=0; i<k; i++)
+            Insert(i);
+        ans.Add(nums[w.First.Value]);
+        
+        // Main loop
+        for(int i=k; i<nums.Length; i++) {
+            // Remove the first element if it's out of range
+            if (w.First.Value<= i- k)
+                w.RemoveFirst();
+            Insert(i);
+            ans.Add(nums[w.First.Value]);
+        }
+        
+        return ans.ToArray();
+    }
+}
