@@ -55,3 +55,44 @@ public class Solution {
         
     }
 }
+
+// Comment: Similar to above, but use just regular topological sort.
+public class Solution {
+    public bool CanFinish(int numCourses, int[,] prerequisites) {
+        var map= new Dictionary<int, List<int>>();
+        var smap = new Dictionary<int, int>();
+        var parents = new HashSet<int>();
+        var output = new List<int>();
+        for(int i=0; i<numCourses; i++) {
+            map[i] = new List<int>();
+            smap[i] = 0; //0 unvisited, 1 gray, 2 final/black
+            parents.Add(i);
+        }
+
+        for(int i=0; i<prerequisites.GetLength(0); i++) {
+            map[prerequisites[i,1]].Add(prerequisites[i,0]);
+            parents.Remove(prerequisites[i,0]);
+        }
+        
+        bool Rec(int n) {
+            if (smap[n]==2) return true;
+            if (smap[n]==1) return false;
+            smap[n] = 1;
+            foreach(var next in map[n]) {
+                if (!Rec(next))
+                    return false;                    
+            }
+
+            smap[n] = 2;
+            output.Add(n); // In toplogical sort, turn it into black and put it to the list.
+            return true;
+        }
+        
+        foreach(var p in parents)
+            if (!Rec(p))
+                return false;
+        
+        return output.Count == numCourses;
+        
+    }
+}
