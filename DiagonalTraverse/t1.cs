@@ -78,3 +78,40 @@ public class Solution {
         return ans;
     }
 }
+
+// Comment: Simpler one
+public class Solution {
+    public int[] FindDiagonalOrder(int[,] matrix) {
+        int Row = matrix.GetLength(0);
+        int Col = matrix.GetLength(1);
+        var ans = new int[Row * Col];
+        bool UpRight = true;
+        int i=0, j=0;
+        for(int k=0; k<ans.Length; k++) {
+            ans[k] = matrix[i,j];
+            if (UpRight) {
+                if (j == Col - 1) { // last column
+                    i++;
+                    UpRight = false;
+                } else if (i== 0) {// first row
+                    j++;
+                    UpRight = false;
+                } else {
+                    i--; j++;
+                }
+            } else { // Down Left
+                if (i== Row - 1) { // last row
+                    j++;
+                    UpRight = true;
+                } else if (j==0) { // first col
+                    i++;
+                    UpRight = true;
+                } else {
+                    i++; j--;
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
