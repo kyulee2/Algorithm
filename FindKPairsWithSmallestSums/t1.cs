@@ -29,6 +29,7 @@ Explanation: All possible pairs are returned from the sequence: [1,3],[2,3]
 // Initialize nums1[i] where i=0~k with nums2[0] to the heap.
 // Whevenr the top element is popped from the heap, the next element form nums2 should be added/pushed to the heap. e.g,: (0,0) -> (0,1), (3,4)->(3,5)
 // This ensures we cover all the pairs for the same nums1 elemnent with the nums2 moving right-forward -- the elements are sorted. The heap will maintain the lowest element from the given candidates. So, the heap element should be (nums1, nums2, idx to nums2). The comparision function/value should be nums1+ nums2 in the heap.
+// Time complexity is O(kLogk) since heap size is k and the loop iterates at most k times.
 class Heap {
     List<int[]> data;
     public Heap() {
