@@ -49,5 +49,28 @@ public class Solution {
         return ans.ToString();
     }
 }
-
+// Comment: Another one
+public class Solution {
+    public string LicenseKeyFormatting(string S, int K) {
+        StringBuilder b = new StringBuilder();
+        foreach(var c in S)
+            if (c!='-')
+                b.Append(Char.ToUpper(c));
+        S = b.ToString();
+        b.Clear();
+        int n = S.Length % K;
+        int i=0;
+        if (n==0 && S.Length != 0) // spoiler: null S check
+            n +=K;
+       // Console.WriteLine("S: {0}",S.Length);
+        for(; i<n; i++)
+            b.Append(S[i]);
+        for(; i<S.Length; i+=K) {
+            b.Append('-');
+            for(int j=i; j<i+K; j++)
+                b.Append(S[j]);
+        }
+        return b.ToString();
+    }
+}
 
