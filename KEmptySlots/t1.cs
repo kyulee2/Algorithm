@@ -115,3 +115,55 @@ public class Solution
    }
 }
 
+// Comment: Another try with BST build
+public class Solution {
+    class Node
+    {
+        public int val;
+        public Node left;
+        public Node right;
+        public Node(int c) {val = c;}
+    }
+    public int KEmptySlots(int[] flowers, int k) {
+        int len = flowers.Length;
+        if (len==0) return -1;
+        Node root = new Node(flowers[0]);
+        int min, max;
+        bool Rec(Node r, int t) {
+            if (t< r.val) {
+                max = r.val;
+                if (r.left == null) {
+                    r.left = new Node(t);
+                    if (t<max && (max-t-1)==k)
+                        return true;
+                    else if (t>min && (t-min-1)==k)
+                        return true;
+                    else return false;
+                }
+                
+                return Rec(r.left, t);
+            } else {
+                min = r.val;
+                if (r.right == null) {
+                    r.right = new Node(t);
+                    if (t<max && (max-t-1)==k)
+                        return true;
+                    else if (t>min && (t-min-1)==k)
+                        return true;
+                    else return false;                    
+                }
+                
+                return Rec(r.right, t);
+            }
+        }
+        
+        for(int i=1; i<len ; i++) {
+            min = root.val;
+            max = root.val;
+            if (Rec(root, flowers[i]))
+                return i+1;            
+        }
+        
+        return -1;
+    }
+}
