@@ -79,4 +79,50 @@ public class Solution {
         return max;
     }
 }
-
+// Comment: Similar one
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int LongestUnivaluePath(TreeNode root) {
+        int ans = 0;
+        
+        int Rec(TreeNode n) {
+            if (n==null) return 0;
+            int left = Rec(n.left);
+            int right = Rec(n.right);
+            bool sameLeft = false, sameRight = false;
+            if (n.left != null && n.left.val == n.val) {
+                left++;
+                sameLeft = true;
+            }
+            if (n.right != null && n.right.val == n.val) {
+                right++;
+                sameRight = true;
+            }
+            
+            if (sameLeft && sameRight) {
+                int curr = left + right;
+                ans = Math.Max(ans, curr);
+                return Math.Max(left, right);
+            }
+            else if (sameLeft && !sameRight) {
+                ans = Math.Max(ans, left);
+                return left;
+            }
+            else if (!sameLeft && sameRight) {
+                ans = Math.Max(ans, right);
+                return right;
+            }
+            return 0;
+        }
+        Rec(root);
+        return ans;
+    }
+}
