@@ -105,3 +105,54 @@ public class Solution {
         return ans;
     }
 }
+// Comment: Similar one using extra space (stack) to partition arrayfor readability 
+public class Solution {
+    public int[] SortTransformedArray(int[] nums, int a, int b, int c) {
+        int len = nums.Length;
+        var ans = new int[len];
+        int Func(int n) {
+            return a*n*n +  b* n + c;
+        }
+        if (a==0) {
+            for(int i=0; i<len; i++)
+                ans[i] = Func(nums[i]);
+            if (b<0)
+                Array.Reverse(ans);
+            return ans;
+        }
+        
+        double m = -b / 2/ a;   
+        // Find the first entry >= m: Spoiler: equal
+        int j=0;
+        for(;j<len; j++)
+            if (nums[j]>=m)
+                break;
+
+        var l1 = new Stack<int>();
+        var l2 = new Stack<int>();
+        for(int k=len-1; k>=j; --k)
+            l2.Push(nums[k]);
+        for(int k=0; k<j; k++)
+            l1.Push(nums[k]);
+                
+        // merge sort from the ends of l1 and l2
+        // a>0: small to large, a<0: large to small
+        var anst = new List<int>();
+        while(l1.Count!=0 || l2.Count!=0) {
+            if (l1.Count==0)
+                anst.Add(Func(l2.Pop()));
+            else if (l2.Count==0)
+                anst.Add(Func(l1.Pop()));
+            else {
+                if ((a<0 && Func(l2.Peek())<Func(l1.Peek()))
+                    ||(a>0 && Func(l2.Peek())>Func(l1.Peek())))
+                    anst.Add(Func(l1.Pop()));
+                else
+                    anst.Add(Func(l2.Pop()));
+            }
+        }
+        if (a<0)
+            anst.Reverse();
+        return anst.ToArray();
+    }
+}
