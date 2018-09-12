@@ -59,3 +59,55 @@ public class Solution {
         return ans.ToArray();
     }
 }
+// Comment: another practice
+public class Solution {
+    public double[] CalcEquation(string[,] e, double[] values, string[,] queries) {
+        var map = new Dictionary<string, Dictionary<string, double>>();
+        int len = e.GetLength(0);
+        // build vertex
+        for(int i=0; i<len; i++) {
+            if (!map.ContainsKey(e[i,0]))
+                map[e[i,0]] = new Dictionary<string, double>();
+            if (!map.ContainsKey(e[i,1]))
+                map[e[i,1]] = new Dictionary<string, double>();
+        }
+        // build edge
+        for(int i=0; i<len; i++) {
+            map[e[i,0]][e[i,1]] = values[i];
+            if (values[i]!=0.0)
+                map[e[i,1]][e[i,0]] = 1.0/values[i];
+        }
+        
+        int lenq = queries.GetLength(0);
+        var ans = new double[lenq];
+        for(int i=0; i<lenq; i++) {
+            var start = queries[i,0];
+            var end = queries[i,1];
+            var visited = new HashSet<string>();
+            double tans = -1;
+            bool Rec(string n, double s) {
+                // Spoiler: x/x.. Need to check if it exists in the map
+                if (!map.ContainsKey(n))
+                    return false;
+                
+                if (visited.Contains(n)) return false;
+                visited.Add(n);
+                if (n==end) {
+                    tans = s;
+                    return true;
+                }
+                else {
+                    foreach(var next in map[n].Keys) {
+                        if (Rec(next, s * map[n][next]))
+                            return true;
+                    }
+                }
+                return false;
+            }
+            Rec(start, 1.0);
+            ans[i] = tans;
+        }
+        
+        return ans;
+    }
+}
