@@ -55,6 +55,33 @@ public class Codec {
         return Rec(0, len);            
     }
 
+    // Another way using BinarySearch
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(string data) {
+        if (data == "") return null;
+        var ins = data.Split(' ');
+        int len = ins.Length;
+        var input = new List<int>();
+        foreach(var s in ins)
+            input.Add(Convert.ToInt32(s));
+        
+        TreeNode Rec(int i, int j) { // reconstruct preorder from i to j (not inclusive)
+            if (i>j)
+                return null;
+            var ans = new TreeNode(input[i]);
+            // Search index at which is greater than the current value
+            var k = input.BinarySearch(i+1, j-i, ans.val, Comparer<int>.Create((x, y) =>x-y));
+            if (k<0)
+                k = -k - 1;
+            ans.left = Rec(i+1, k-1);
+            ans.right = Rec(k, j);
+            return ans;
+        }
+        //Console.WriteLine(data);
+        return Rec(0, len-1);            
+    }
+
+
 }
 
 // Your Codec object will be instantiated and called as such:
