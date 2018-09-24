@@ -11,6 +11,8 @@ Output: False
 */
 // Comment: Various ways. Either use two pointers or binary search.
 // The blow just searches the interger using sqrt to see if the value is integer
+// O(sqrt c log c). We iterate sqrt c. For each sqrt operation, the worst case is log c.
+// Space is O(1)
 public class Solution {
     public bool JudgeSquareSum(int c) {
         if (c==0) return true; // spoiler:
