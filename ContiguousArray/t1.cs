@@ -19,6 +19,7 @@ Note: The length of the given binary array will not exceed 50,000.
 // Sum = 1 at 0 and 4. When query the index for sum= 1 at 4 index, we could find 0 from the map which was recorded
 // in the prior iteration at 0 index. So the max distance is 4 - 0 = 4 at such index.
 // By sliding window, update such max value.
+// O(n) time and space
 public class Solution {
     public int FindMaxLength(int[] nums) {
         int len = nums.Length;
