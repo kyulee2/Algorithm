@@ -20,6 +20,30 @@ The read function will only be called once for each test case.
 // Comment: Straighforwrad. Careful about n<3 case to pikc min of n or r below.
 /* The Read4 API is defined in the parent class Reader4.
       int Read4(char[] buf); */
+public class Solution : Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Maximum number of characters to read
+     * @return    The number of characters read
+     */
+    public int Read(char[] buf, int n) {
+        var b = new char[4];
+        for(int i=0; i< (n/4)*4; i+= 4) {
+            var r = Read4(b);
+            Array.Copy(b, 0, buf, i, r);
+            if (r<4)
+                return i + r;
+        }
+        var t = n%4;
+        if (t!=0) {
+            int j = n - t;// 1 2 3
+            var r = Read4(b);
+            Array.Copy(b, 0, buf, j, Math.Min(r, t));
+            return j + Math.Min(r, t);
+        }
+        return n;
+    }
+}
 
 public class Solution : Reader4 {
     /**
