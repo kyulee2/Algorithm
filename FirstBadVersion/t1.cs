@@ -16,8 +16,27 @@ call isBadVersion(4) -> true
 Then 4 is the first bad version. 
 */
 // Comment: Easy. check the prior boundary condition 
+// The first one is easier. Bookkeep qualified answer right away.
+// O(nlogn)
 /* The isBadVersion API is defined in the parent class VersionControl.
       bool IsBadVersion(int version); */
+
+public class Solution : VersionControl {
+    public int FirstBadVersion(int n) {
+        int i  =1, j=n;
+        var ans = n;
+        while(i<=j) {
+            int m = i + (j-i)/2;
+            if (IsBadVersion(m)) {
+                ans = m;
+                j = m-1;
+            } else {
+                i = m + 1;
+            }
+        }
+        return ans;
+    }
+}
 
 public class Solution : VersionControl {
     public int FirstBadVersion(int n) {
