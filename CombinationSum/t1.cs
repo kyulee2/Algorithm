@@ -26,6 +26,36 @@ A solution set is:
 ]
 */
 // Comment: Traditional but cautious of recursion
+// The former is simpler though both work
+public class Solution {
+    public IList<IList<int>> CombinationSum(int[] candidates, int target) {
+        Array.Sort(candidates);
+        
+        int len = candidates.Length;
+        var t = new List<int>();
+        var ans = new List<IList<int>>();
+        
+        void Rec(int idx, int tgt) {
+            if (tgt == 0) {
+                ans.Add(new List<int>(t));
+                return; 
+            }
+            
+            for(int i=idx; i<len; i++) // stars from idx to handle duplicated selection
+            {
+                if (tgt >= candidates[idx]) {
+                    t.Add(candidates[i]);
+                    Rec(i, tgt - candidates[i]);
+                    t.RemoveAt(t.Count - 1);
+                } else break;
+            }
+        }
+        
+        Rec(0, target);
+        
+        return ans;
+    }
+}
 
 public class Solution {
     public IList<IList<int>> CombinationSum(int[] candidates, int target) {
