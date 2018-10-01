@@ -25,8 +25,7 @@ Return 3. The paths that sum to 8 are:
 2.  5 -> 2 -> 1
 3. -3 -> 11
 */
-// Comment: Use a map to track prefix sum and its count. It's interesting.
-// O(n) space and time
+// Comment: Strightfoward. O(nd). There is  a better one O(n). The below is not optimal though it's passed.
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -38,26 +37,25 @@ Return 3. The paths that sum to 8 are:
  */
 public class Solution {
     public int PathSum(TreeNode root, int sum) {
-        var map = new Dictionary<int, int>(); // prefix sum : count
-        map[0] = 1;
         int ans = 0;
-        void Rec(TreeNode n, int curr)
+        void Rec(TreeNode n, List<int> parents)
         {
             if (n==null) return;
-            curr += n.val;
-            if (map.ContainsKey(curr-sum))
-                ans += map[curr-sum];
-            if (map.ContainsKey(curr))
-                ++map[curr];
-            else map[curr] = 1;
+
+            var next = new List<int>();
+            foreach(var p in parents)
+                next.Add(p + n.val);
+            next.Add(n.val);
             
-            Rec(n.left, curr);
-            Rec(n.right, curr);
-            
-            // Reset curr from map before returning to parent
-            --map[curr];
+            foreach(var p in next) {
+                if (p == sum)
+                    ans++;
+            }
+            Rec(n.left, next);
+            Rec(n.right, next);
         }
-        Rec(root, 0);
+        
+        Rec(root, new List<int>());
         return ans;
     }
 }
