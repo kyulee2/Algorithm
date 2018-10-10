@@ -49,6 +49,37 @@ We don't consider the impact of flight hours towards the calculation of vacation
 // Comment: long description, but it's a DP or Rec + memoization as below.
 // Key point is to max of staying the same city, traveling other city to stay there.
 // Should add up staying days before moving on recursion.
+// Other way first -- 
+public class Solution {
+    public int MaxVacationDays(int[,] flights, int[,] days) {
+        int City = flights.GetLength(0);
+        int Week = days.GetLength(1);
+        var map = new int?[City, Week];
+        
+        int Rec(int i, int j) // City, the current week
+        {
+            if (j==Week)
+                return 0;
+            if (map[i, j]!=null)
+                return (int)map[i,j];
+            
+            // Stay the same city
+            int max = days[i,j] + Rec(i, j+1);
+            
+            for(int k=0; k<City; k++)
+                if (flights[i,k] != 0)
+                    max = Math.Max(max, days[k,j] + Rec(k, j+1));
+
+            map[i,j] = max;
+            
+            return max;
+        }
+        
+        return Rec(0, 0);
+    }
+}
+// 
+
 public class Solution {
     public int MaxVacationDays(int[,] flights, int[,] days) {
         int City = flights.GetLength(0);
