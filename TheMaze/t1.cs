@@ -92,13 +92,14 @@ public class Solution {
         
         if (i ==d[0] && j == d[1])
             return true;
-        if (visited[i, j])
-            return false;
         // Spoiler: check cache
-        if (map[i,j] != 0)
+
+        if (map[i,j] > 0)
             return map[i,j] == 1;
-        
-        visited[i,j] = true;
+        if (map[i,j] < 0) /// combined visited check
+            return false;
+        map[i,j] = -1; // visited; This can't be hoisted above map[i,j]>0 check.. This will be overwritten after all child recursion is done below.        
+
         bool ans = false;
         if (isValid(i+1, j))
             ans |= Rec(getNext(i+1, j, Direction.Down));
@@ -108,7 +109,6 @@ public class Solution {
             ans |= Rec(getNext(i, j+1, Direction.Right));
         if (isValid(i, j-1))
             ans |= Rec(getNext(i, j-1, Direction.Left));        
-        visited[i,j] = false;
         
         map[i,j] = ans ? 1 : 2;
         return ans;
