@@ -8,28 +8,22 @@ Input: n = 5, and edges = [[0,1], [1,2], [2,3], [1,3], [1,4]]
 Output: false
 Note: you can assume that no duplicate edges will appear in edges. Since all edges are undirected, [0,1] is the same as [1,0] and thus will not appear together in edges.
 */
-// Comment: t1.cs seems so tricky to repro
-// Here uses build graph with edge for undirect graph
-// Use not visited set. For each visited, remove opposite edge so that we don't come back thru the same edge.
-// WHen visiting finished, ensure all nodes are visited without cycle.
-// Unlike topological sort where a schedule is needed, here we don't. so a visited set should be enough.
-
+// Comment: The graph is undirected map. So, I added both edges from src to tgt, vice-versa. THis is simpler than t1.cs.
+// The key idea is to remove opposite edge -- we take one direction only.
+// In case a same node is visited, it means not valid DAG.
 class Solution {
 public:
     set<int> visited;
-    map<int, set<pair<int,int>>> m; // graph
+    map<int, set<int>> m; // graph
     bool Rec(int n) {
         if (visited.find(n) != visited.end()) return false;
         visited.insert(n);
         
-        for(auto edge : m[n]) {
-            // remove edge
-            for(auto e : m[edge.second])
-                if (e.second==n) {
-                    m[edge.second].erase(e);
-                    break;
-                }
-            if (!Rec(edge.second))
+        for(auto t : m[n]) {
+            // remove opposite edge
+            m[t].erase(n);
+            
+            if (!Rec(t))
                 return false;
         }
         
@@ -39,8 +33,10 @@ public:
     bool validTree(int n, vector<pair<int, int>>& edges) {
         // BUild graph both edges
         for(auto e : edges) {
-            m[e.first].insert(make_pair(e.first, e.second));
-            m[e.second].insert(make_pair(e.second, e.first));
+            auto s = e.first;
+            auto t = e.second;
+            m[s].insert(t);
+            m[t].insert(s);
         }
         
         if (!Rec(0))
@@ -51,3 +47,5 @@ public:
         return true;
     }
 };
+
+
