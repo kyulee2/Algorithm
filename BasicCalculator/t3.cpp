@@ -13,8 +13,8 @@ public:
                 i++; continue;
             }
             int j= i;
-            while(j<s.length() && isdigit(s[j]))
-              tokens.push_back(s.substr(i, ++j-i));
+            while(j<s.length() && isdigit(s[j])) j++;
+            tokens.push_back(s.substr(i, j-i));
             
             i=j;
         }
@@ -26,7 +26,7 @@ public:
     // primary = number
     int expr() {
         int ans = primary();
-        while(i<len && tokens[i]=="+"|| tokens[i]=="-") {
+        while(i<len && (tokens[i]=="+"|| tokens[i]=="-")) {
             if (tokens[i++]=="+")
                 ans += primary();
             else

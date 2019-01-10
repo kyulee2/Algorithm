@@ -30,11 +30,13 @@ public:
                 i++; continue;
             }
             int j= i;
-            while(j<s.length() && isdigit(s[j]))
-              tokens.push_back(s.substr(i, ++j-i));
+            while(j<s.size() && isdigit(s[j])) j++;
+            tokens.push_back(s.substr(i,j-i));
             
             i=j;
         }
+        for(auto t : tokens)
+            cout<<t<<endl;
     }
     
     int expr()
@@ -52,7 +54,7 @@ public:
     {
         int ans = number();
         string s;
-        while(i<len && ((s=tokens[i])=="*") || s=="/") {
+        while(i<len && ((s=tokens[i])=="*" || s=="/")) {
             i++; // consume */
             if (s=="*") ans *= number();
             else ans /= number();
